@@ -29,12 +29,17 @@ SYSTEM_PROMPT = """
 绝对不要扮演全知全能的老师，不要直接输出教科书定义。
 """
 
-def stream_feynman_response(messages):
+def stream_feynman_response(messages, pet_name="费曼", pet_knowledge=""):
     model_name = os.getenv("OPENAI_MODEL_NAME", "gpt-3.5-turbo")
+    
+    custom_system_prompt = SYSTEM_PROMPT.replace("“费曼”", f"“{pet_name}”")
+    if pet_knowledge:
+        custom_system_prompt += f"\n\n你已经学到的知识（请在对话中表现出你记得这些）：\n{pet_knowledge}"
+    
     try:
         response = client.chat.completions.create(
             model=model_name,
-            messages=[{"role": "system", "content": SYSTEM_PROMPT}] + messages,
+            messages=[{"role": "system", "content": custom_system_prompt}] + messages,
             temperature=0.7,
             stream=True
         )
@@ -42,4 +47,23 @@ def stream_feynman_response(messages):
             if chunk.choices[0].delta.content:
                 yield chunk.choices[0].delta.content
     except Exception as e:
-        yield f"哎呀，费曼的小脑袋出错了：{str(e)}"
+        yield f"哎呀，{pet_name}的小脑袋出错了：{str(e)}"
+
+def extract_knowledge(messages):
+    """
+    分析对话，提取宠物学到的新知识。
+    """
+    model_name = os.getenv("OPENAI_MODEL_NAME", "gpt-3.5-turbo")
+    prompt = "请根据以下对话，总结宠物学到的核心知识点（简短的一两句话）。如果没学到新知识，请返回空字符串。\n\n对话内容：\n"
+    for m in messages[-4:]: # 只看最近几轮
+        prompt += f"{m['role']}: {m['content']}\n"
+    
+    try:
+        response = client.chat.completions.create(
+            model=model_name,
+            messages=[{"role": "system", "content": "你是一个知识提取助手。"}, {"role": "user", "content": prompt}],
+            temperature=0.3
+        )
+        return response.choices[0].message.content.strip()
+    except:
+        return ""

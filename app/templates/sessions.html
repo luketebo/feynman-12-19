@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ pet.name }} 的会话 - 费曼</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .header { margin-bottom: 30px; }
+        .session-list { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .session-item { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: inherit; }
+        .session-item:last-child { border-bottom: none; }
+        .session-item:hover { background-color: #f9f9f9; }
+        .session-title { font-weight: bold; color: #333; }
+        .session-date { font-size: 0.8rem; color: #999; }
+        .create-form { margin-top: 30px; background: white; padding: 20px; border-radius: 12px; }
+        input { padding: 10px; border: 1px solid #ddd; border-radius: 4px; width: 70%; }
+        button { padding: 10px 20px; background: #075e54; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="{{ url_for('pet.list_pets') }}" style="color: #075e54; text-decoration: none;">← 返回宠物列表</a>
+            <h1>{{ pet.name }} 的会话</h1>
+        </div>
+
+        <div class="session-list">
+            {% for session in sessions %}
+            <a href="{{ url_for('main.chat', session_id=session.id) }}" class="session-item">
+                <div>
+                    <div class="session-title">{{ session.title }}</div>
+                    <div class="session-date">{{ session.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
+                </div>
+                <div style="color: #075e54;">进入对话 →</div>
+            </a>
+            {% else %}
+            <div style="padding: 20px; text-align: center; color: #999;">暂无会话，开启一个新的吧！</div>
+            {% endfor %}
+        </div>
+
+        <div class="create-form">
+            <h3>开启新会话</h3>
+            <form action="{{ url_for('pet.create_session', pet_id=pet.id) }}" method="POST">
+                <input type="text" name="title" placeholder="会话主题（如：学习负数）" required>
+                <button type="submit">开始</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

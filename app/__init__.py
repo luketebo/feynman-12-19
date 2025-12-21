@@ -37,12 +37,26 @@ def create_app():
     from app.routes.auth import auth_bp
     from app.routes.main import main_bp
     from app.routes.chat import chat_bp
+    from app.routes.pet import pet_bp
+    from app.routes.shop import shop_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
     app.register_blueprint(chat_bp)
+    app.register_blueprint(pet_bp)
+    app.register_blueprint(shop_bp)
 
     with app.app_context():
         db.create_all()
+        # 初始化商城皮肤
+        from app.models import Skin
+        if not Skin.query.first():
+            skins = [
+                Skin(name="经典款", price=0, description="费曼最喜欢的原始装扮"),
+                Skin(name="小博士", price=100, description="戴上眼镜，看起来更聪明了"),
+                Skin(name="宇航员", price=500, description="向着星辰大海出发！")
+            ]
+            db.session.add_all(skins)
+            db.session.commit()
 
     return app

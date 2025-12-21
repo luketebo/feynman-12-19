@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的宠物 - 费曼</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .pet-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .pet-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; transition: transform 0.2s; cursor: pointer; text-decoration: none; color: inherit; }
+        .pet-card:hover { transform: translateY(-5px); }
+        .pet-avatar { font-size: 3rem; margin-bottom: 10px; }
+        .pet-name { font-size: 1.2rem; font-weight: bold; color: #075e54; }
+        .pet-info { font-size: 0.9rem; color: #666; margin-top: 5px; }
+        .create-form { background: white; padding: 20px; border-radius: 12px; margin-top: 30px; }
+        input { padding: 10px; border: 1px solid #ddd; border-radius: 4px; width: 200px; }
+        button { padding: 10px 20px; background: #075e54; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>我的宠物 (💰 {{ pets[0].owner.coins if pets else 0 }})</h1>
+            <a href="{{ url_for('shop.index') }}" style="color: #075e54; text-decoration: none; font-weight: bold;">🛒 商城</a>
+        </div>
+
+        <div class="pet-grid">
+            {% for pet in pets %}
+            <a href="{{ url_for('pet.list_sessions', pet_id=pet.id) }}" class="pet-card">
+                <div class="pet-avatar">👶</div>
+                <div class="pet-name">{{ pet.name }}</div>
+                <div class="pet-info">等级: {{ pet.level }} | 知识点: {{ pet.knowledge.split('\n')|length if pet.knowledge else 0 }}</div>
+            </a>
+            {% endfor %}
+        </div>
+
+        <div class="create-form">
+            <h3>领养新宠物</h3>
+            <form action="{{ url_for('pet.create_pet') }}" method="POST">
+                <input type="text" name="name" placeholder="给宠物起个名字" required>
+                <button type="submit">领养</button>
+            </form>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <a href="{{ url_for('auth.logout') }}" style="color: #666; text-decoration: none;">退出登录</a>
+        </div>
+    </div>
+</body>
+</html>
