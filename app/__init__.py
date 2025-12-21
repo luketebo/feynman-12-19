@@ -20,7 +20,13 @@ class PrefixMiddleware(object):
 
 def create_app():
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../instance/feynman.db'
+    
+    # 强制使用环境变量中的数据库连接字符串
+    db_url = os.getenv('DATABASE_URL')
+    if not db_url:
+        raise ValueError("未设置 DATABASE_URL 环境变量，请在 .env 文件中配置 MySQL 连接。")
+    
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.secret_key = os.getenv("SECRET_KEY", "feynman_secret_key")
 
