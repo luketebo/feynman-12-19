@@ -23,7 +23,10 @@
     <div class="container">
         <div class="header">
             <h1>我的宠物 (💰 {{ pets[0].owner.coins if pets else 0 }})</h1>
-            <a href="{{ url_for('shop.index') }}" style="color: #075e54; text-decoration: none; font-weight: bold;">🛒 商城</a>
+            <div>
+                <a href="{{ url_for('shop.index') }}" style="color: #075e54; text-decoration: none; font-weight: bold; margin-right: 15px;">🛒 商城</a>
+                <a href="{{ url_for('auth.logout') }}" style="color: #666; text-decoration: none; font-size: 0.9rem; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px;">退出登录</a>
+            </div>
         </div>
 
         <div class="pet-grid">
@@ -42,10 +45,6 @@
                 <input type="text" name="name" placeholder="给宠物起个名字" required>
                 <button type="submit">领养</button>
             </form>
-        </div>
-        
-        <div style="margin-top: 20px;">
-            <a href="{{ url_for('auth.logout') }}" style="color: #666; text-decoration: none;">退出登录</a>
         </div>
     </div>
 </body>

@@ -22,7 +22,10 @@
 <body>
     <div class="container">
         <div class="header">
-            <a href="{{ url_for('pet.list_pets') }}" style="color: #075e54; text-decoration: none;">← 返回宠物列表</a>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <a href="{{ url_for('pet.list_pets') }}" style="color: #075e54; text-decoration: none;">← 返回宠物列表</a>
+                <a href="{{ url_for('auth.logout') }}" style="color: #666; text-decoration: none; font-size: 0.9rem; border: 1px solid #ccc; padding: 5px 10px; border-radius: 4px;">退出登录</a>
+            </div>
             <h1>{{ pet.name }} 的会话</h1>
         </div>
 

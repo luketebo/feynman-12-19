@@ -14,6 +14,8 @@ def login():
             user = User(username=username, password=password)
             db.session.add(user)
             db.session.commit()
+        elif user.password != password:
+            return render_template('login.html', error="密码错误，请重试")
         
         session['user_id'] = user.id
         return redirect(url_for('main.index'))

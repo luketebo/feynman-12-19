@@ -53,15 +53,12 @@
             <a href="{{ url_for('pet.list_pets') }}" style="display: block; margin-bottom: 10px; color: #075e54; text-decoration: none; font-weight: bold;">← 返回宠物列表</a>
             <a href="{{ url_for('shop.index') }}" style="display: block; margin-bottom: 10px; color: #075e54; text-decoration: none; font-weight: bold;">🛒 前往商城</a>
         </div>
-
-        <div style="margin-top: auto;">
-            <a href="{{ url_for('auth.logout') }}" style="color: #666; text-decoration: none;">退出登录</a>
-        </div>
     </div>
 
     <div class="chat-container">
         <div class="header">
             <span>正在教导 {{ pet.name }} - {{ chat_session.title }}</span>
+            <a href="{{ url_for('auth.logout') }}" style="color: white; text-decoration: none; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.5); padding: 4px 12px; border-radius: 15px; transition: all 0.3s;">退出登录</a>
         </div>
         <div class="messages" id="message-box">
             {% for msg in messages %}
