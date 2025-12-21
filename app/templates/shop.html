@@ -63,37 +63,5 @@
             }
         }
     </script>
-    </div>
-
-    <script>
-        async function buySkin(skinId, price) {
-            const petId = document.getElementById('pet-id').value;
-            if (!petId) {
-                alert('请先领养一个宠物！');
-                return;
-            }
-
-            if (!confirm(`确定花费 ${price} 金币购买吗？`)) return;
-
-            const formData = new FormData();
-            formData.append('pet_id', petId);
-
-            try {
-                const response = await fetch(`/shop/buy/${skinId}`, {
-                    method: 'POST',
-                    body: formData
-                });
-                const data = await response.json();
-                if (data.success) {
-                    alert('购买成功！');
-                    location.reload();
-                } else {
-                    alert('购买失败：' + data.error);
-                }
-            } catch (error) {
-                alert('请求出错：' + (error && error.message ? error.message : error));
-            }
-        }
-    </script>
 </body>
 </html>

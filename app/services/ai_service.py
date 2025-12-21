@@ -44,7 +44,7 @@ def stream_feynman_response(messages, pet_name="费曼", pet_knowledge=""):
             stream=True
         )
         for chunk in response:
-            if chunk.choices[0].delta.content:
+            if chunk.choices and len(chunk.choices) > 0 and chunk.choices[0].delta.content:
                 yield chunk.choices[0].delta.content
     except Exception as e:
         yield f"哎呀，{pet_name}的小脑袋出错了：{str(e)}"
