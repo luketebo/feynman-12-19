@@ -30,5 +30,19 @@ def chat(session_id):
     if not chat_session or chat_session.pet.user_id != session['user_id']:
         return "Session not found", 404
     
+    # 2. 通过会话找到对应的宠物对象
+    # 因为你在 Session 模型里定义了 backref='pet'，所以可以直接用
+    my_pet_object = chat_session.pet
+
+    # --- 关键点来了 ---
+    # 此时，my_pet_object.current_skin 就已经是那个皮肤对象了（如果它有皮肤的话）
+    # 我们可以先准备好图片 URL，处理一下它没有皮肤的默认情况
+    
+    # 默认头像（假设在 static/img/default_avatar.png）
+    avatar_filename = 'img/doujun_normal.png' 
+    
+    if my_pet_object.current_skin: 
+        avatar_filename = 'img/' + my_pet_object.current_skin.image_url
+    
     messages = Message.query.filter_by(session_id=session_id).order_by(Message.timestamp.asc()).all()
-    return render_template('index.html', pet=chat_session.pet, chat_session=chat_session, messages=messages)
+    return render_template('index.html', pet=chat_session.pet, chat_session=chat_session, messages=messages,avatar_filename=avatar_filename)

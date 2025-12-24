@@ -19,6 +19,9 @@ class Pet(db.Model):
     experience = db.Column(db.Integer, default=0)
     knowledge = db.Column(db.Text, default='') # 存储学到的知识，跨会话共享
     current_skin_id = db.Column(db.Integer, db.ForeignKey('skin.id'), nullable=True)
+    # 【新增】2. 建立关系：这让你可以通过 pet.current_skin 直接访问 Skin 对象
+    # backref 不是必须的，但加上它可以让 Skin 对象反向查询 Pet
+    current_skin = db.relationship('Skin', backref='equipped_by_pets', lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     sessions = db.relationship('Session', backref='pet', lazy=True)
 
